@@ -1,0 +1,82 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: AkkuratProRegular;
+  src: url("./assets/css/AKKRG_PRO_1_NS.OTF") format("truetype");
+}
+
+@font-face {
+  font-family: AkkuratProBold;
+  src: url("./assets/css/AKKBD_PRO_1_NS.OTF") format("truetype");
+}
+
+
+.font-seven-hundred {
+    font-weight: 700;
+}
+
+.font-five-hundred {
+    font-weight: 500;
+}
+
+.crsr-hand {
+    cursor: pointer;
+}
+
+.font-smaller {
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.mat-btn {
+    width: 25%;
+}
+
+.font-point-eight {
+    font-size: 0.8rem !important;
+}
+
+.form-control {
+    height: calc(1.8rem + 2px);
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+body {
+    background-color: #FFDEE9;
+    background-image: linear-gradient(206deg, #FFDEE9 0%, #B5FFFC 100%);
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  
+  text {
+    fill: black !important;
+    text-anchor: middle;
+    font-size: 0.8rem;
+  }
+  
+  html, body {
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0px !important;
+  }
+
+
+@media (max-width: 320px) {
+    body, p {
+        font-size: 12px !important;
+    }
+}
+
+@media (min-width: 1920px) {
+    body {
+        font-size: 1.3rem;
+    }
+}
+  
+
+  

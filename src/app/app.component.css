@@ -1,0 +1,221 @@
+.main-div {
+    display: flex;
+    align-items: center;
+}
+
+.note-card {
+    position: absolute;
+    z-index: 1;
+    /* border: 1px solid black; */
+}
+
+.note-card.detailed-notes {
+    display: none;
+}
+
+.parent-div {
+    box-shadow: rgb(50 50 93 / 25%) 0px 13px 27px -5px, rgb(0 0 0 / 30%) 0px 8px 16px -8px;
+    border-radius: 2px;
+    max-width: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.label-name-block {
+    width: fit-content !important;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
+
+.label-filter-btn {
+    font-size: 0.8rem;
+}
+
+.edit-dialog-btns {
+    line-height: 30px !important;
+}
+
+.detailed-notes {
+    transition:all 0.5s ease;
+    z-index: 11;
+    /* display: none; */
+}
+
+.note-card:hover + .detailed-notes {
+    display: block !important;
+    z-index: 20;
+    transition:all 0.5s ease;
+}
+
+.note-card:hover {
+    transform: scale(1.1);
+    transition: all .3s ease-in-out;
+    z-index: 10;
+}
+
+.note-table tbody tr {
+    height: 23vh;
+}
+
+.notes-block {
+    /* min-width: 200px; */
+    width: 19.5rem;
+    border: 1.5px solid black;
+}
+
+.note-card:hover .note-summary {
+    white-space:normal !important;
+    overflow: auto !important;
+    transition: all .3s ease-in-out;
+}
+
+.bg-Frontend {
+    background-color: #dee1f2;
+    border-top: 4px solid #7986cc;
+}
+
+.bg-Backend {
+    background-color: #b2dfdc;
+    border-top: 4px solid rgba(0,150,136);
+}
+
+.bg-Security {
+    background-color: #ffbdbe;
+    border-top: 4px solid rgb(255, 109, 109);
+}
+
+.header-section {
+    background-color: #FFDEE9;
+    font-size: medium;
+    border: 1.5px solid black;
+    margin-top: 0.25rem;
+}
+
+.week-number-div {
+    text-align: center;
+}
+
+.label-filters {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    position: absolute;
+    left: 0;
+}
+
+.editable-section {
+    width: 25%;
+    position: absolute;
+    right: 0;
+    top: 1%;
+    bottom: 1%;
+    z-index: 10;
+    border-radius: 5px;
+    background-color: white;
+    /* transition: all 12s ease-in-out; */
+    box-shadow: rgb(50 50 93 / 25%) 0px 13px 27px -4px, rgb(0 0 0 / 30%) 0px 10px 40px 32px;
+}
+
+.label-chip {
+    background-color: lightgray;
+    border-radius: 16px;
+    padding-top: 1.25%;
+    padding-bottom: 1.25%;
+    padding-left: 3%;
+    padding-right: 3%;
+    font-weight: 500;
+    margin-right: 4%;
+}
+
+.selected-chip {
+    background-color: rgba(138,74,243,0.8);
+    color: white;
+}
+
+.selected-chip-tick {
+    width: fit-content !important;
+    height: fit-content !important;
+    font-size: initial;
+    margin-right: 5%;
+    font-weight: 600;
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
+
+.date-cell {
+    font-size: 0.8rem;
+}
+
+.btn-section {
+    display: flex;
+    justify-content: space-around;
+}
+
+.loading-card {
+    width: 80%;
+    height: 75px;
+    background-image: linear-gradient(90deg, #ddd 0px, #e8e8e8 40px, #ddd 80px);
+    animation: loader 1.6s infinite linear;
+}
+
+@keyframes loader {
+    0% {
+      opacity:0.4;
+    }
+    40%{
+      opacity:0.8;
+    }
+    100% {
+      opacity:0.4;
+    }
+  }
+
+@media (max-width: 768px) {
+    .note-card {
+        height: 5%;
+        overflow: hidden;
+        margin-left: 0 !important;
+    }
+
+    .btn-section {
+        display: block;
+    }
+
+    .mat-btn {
+        width: 100%;
+    }
+
+    .editable-section {
+        width: 100%;
+    }
+
+    .note-card:hover {
+        height: unset !important;
+    }
+
+    .parent-div {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .label-name-block, .date-cell {
+        padding: 0;
+    }
+
+    .header-section, .label-filter-btn, .label-name-block, .date-cell {
+        font-size: 8px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .main-div {
+        display: block;
+        position: absolute;
+        top: 10%;
+    }
+
+    .header-section, .label-filter-btn, .label-name-block, .date-cell {
+        font-size: inherit;
+    }
+}

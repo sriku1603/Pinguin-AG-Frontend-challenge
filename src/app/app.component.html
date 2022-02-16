@@ -1,0 +1,207 @@
+<div class="h-100 w-100 main-div">
+    <div class="p-2 bg-white parent-div">
+        <ng-container *ngIf="!loadingIndicator; else loadingTemplate">
+            <div class="w-100 header-section py-2 font-five-hundred">
+                <mat-grid-list cols="12" rowHeight="3.5vh">
+                    <mat-grid-tile colspan="2">
+                        <ng-container *ngTemplateOutlet="matDropdown; context: {visibleLabels: getVisibleLabels()}">
+                        </ng-container>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="10" class="week-number-div">
+                        <div class="d-flex flex-row">
+                            <span class="material-icons crsr-hand" (click)="changeWeek('decrement')">arrow_left</span>
+                            <span>WEEK: {{selectedWeek}}</span>
+                            <span class="material-icons crsr-hand" (click)="changeWeek('increment')">arrow_right</span>
+                        </div>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered note-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%;"></th>
+                            <th *ngFor="let date of visibleDates" class="text-center date-cell text-muted"
+                                style="width: 19.8%;">
+                                {{date | date:'dd.MM.yy'}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let data of dataSource; index as labelIndex">
+                            <tr *ngIf="data?.visible">
+                                <td class="font-five-hundred label-name-block text-muted">
+                                    <div style="transform: rotate(-90deg);">{{data?.labelName}}</div>
+                                </td>
+                                <ng-container *ngFor="let date of visibleDates; index as ind">
+                                    <td [id]="data?.label + '-' + date.getTime()" class="pl-0 notes-block">
+                                        <ng-container *ngTemplateOutlet="noteCard; 
+                        context:{noteCardData: arrangeNoteData(data?.label, date, ind),
+                        label: data.labelName, labelIndex: labelIndex}">
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="editable-section py-2 font-point-eight" id="editable-section" style="display: none;">
+                <div class="w-100 border-bottom py-2">
+                    <h6 class="px-3">Edit Note</h6>
+                </div>
+                <div class="note-form px-3 pt-3">
+                    <label class="font-five-hundred" id="note-title">
+                        Title:
+                    </label>
+                    <input type="text" for="note-title" class="form-control font-point-eight"
+                        [(ngModel)]="editingCard.title" /> <br>
+                    <div class="d-flex justify-content-between">
+                        <div style="width: 45%;">
+                            <label class="font-five-hundred" id="note-start-date">
+                                Start Date:
+                            </label>
+                            <input type="date" class="form-control font-point-eight"
+                                [value]="getDateInFormat(editingCard.startDate)"
+                                (change)="editingCard.startDate = $event.target.value" />
+                        </div>
+                        <div style="width: 45%;">
+                            <label class="font-five-hundred" id="note-duration">
+                                Duration:
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control font-point-eight"
+                                    [(ngModel)]="editingCard.duration" min="1">
+                                <span class="input-group-text font-point-eight py-1">Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <label class="font-five-hundred" id="note-summary">
+                        Summary:
+                    </label>
+                    <textarea for="note-summary" class="form-control font-point-eight" [value]="editingCard.summary"
+                        maxlength="250"></textarea>
+                    <br>
+                    <label class="font-five-hundred" id="note-labels">
+                        Labels:
+                    </label>
+                    <div class="label-chips d-flex ml-1">
+                        <div *ngFor="let label of notesLabelsMetaData" class="d-inline-block label-chip crsr-hand"
+                            [ngClass]="
+                    {'selected-chip': editingCard.labels.includes(label.text)}" (click)="addOrRemoveChip(label.text)">
+                            <div class="d-flex">
+                                <!-- <mat-icon class="selected-chip-tick d-inline-block"
+                                    *ngIf="editingCard.labels.includes(label.text)">done</mat-icon> -->
+                                <div class="d-inline-block">{{label?.text}}</div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <!-- <mat-chip-list class="example-chip" multiple>
+                    <mat-chip class="example-box" *ngFor="let label of notesLabelsMetaData"
+                        [selected]="editingCard.labels.includes(label.text)" (click)="addOrRemoveChip(true, label.text)"
+                        (removed)="addOrRemoveChip(false, label.text)">
+                        {{label?.text}}
+                        <button matChipRemove *ngIf="editingCard.labels.includes(label.text)"
+                            (click)="addOrRemoveChip(true, label.text)">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                </mat-chip-list> -->
+                    <br>
+                    <div class="d-flex btn-section font-point-eight">
+                        <button mat-raised-button class="selected-chip mat-btn edit-dialog-btns"
+                            (click)="closeEditDialog(editingCard)">Save</button>
+                        <button mat-raised-button (click)="closeEditDialog()"
+                            class="mat-btn edit-dialog-btns">Cancel</button>
+                        <button mat-raised-button color="warn" (click)="deleteNote(editingCard.id)"
+                            class="mat-btn edit-dialog-btns">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #loadingTemplate>
+            <table class="table table-bordered note-table loading-indicator-table">
+                <thead>
+                    <tr>
+                        <th *ngFor="let date of getDummyArray(5)">
+                            13/02/2022
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let data of getDummyArray(3)">
+                        <tr>
+                            <ng-container *ngFor="let date of getDummyArray(5)">
+                                <td class="position-relative notes-block">
+                                    <div class="loading-card"></div>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </ng-template>
+    </div>
+</div>
+
+
+<ng-template #matDropdown let-visibleLabels="visibleLabels">
+    <div ngbDropdown class="px-2 label-filters" [autoClose]="'outside'" container="body">
+        <button class="btn btn-filter font-five-hundred bg-transparent label-filter-btn" ngbDropdownToggle>
+            <u>
+                <ng-container *ngIf="(visibleLabels?.length > 0 || visibleLabels?.length<3); else selectAny">
+                </ng-container>
+                {{visibleLabels[0]}}
+                <small *ngIf="visibleLabels?.length > 1">(+ {{visibleLabels?.length - 1}} others selected)</small>
+                <ng-template #selectAny>
+                    Select Any Label
+                </ng-template>
+            </u>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="pl-2">
+            <ng-container *ngFor="let label of notesLabelsMetaData">
+                <mat-checkbox (change)="toggleVisiblity(label?.text)" [checked]="visibleLabels?.includes(label?.text)"
+                    class="d-block font-point-eight" color="primary">
+                    {{label?.text}}
+                </mat-checkbox>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #noteCard let-noteCardData="noteCardData" let-label="label" let-labelIndex="labelIndex">
+    <ng-container *ngFor="let card of noteCardData; let ind = index;">
+        <mat-card class="note-card p-2 crsr-hand text-dark" [style.width]="card.width + '%'"
+            [style.marginTop]="(ind*0.8) + 'rem'" [ngClass]="'bg-' + label" (click)="openEditDialog(card)">
+            <mat-card-content>
+                <p class="font-five-hundred mb-0">{{card?.id}}. {{card?.title}}</p>
+                <p class="note-summary font-smaller text-truncate mb-0">{{card?.summary}}</p>
+                <u class="font-smaller mb-1 font-italic">Starting from {{card?.startDate | date : 'dd MMM'}}
+                    ({{getDuration(card?.startDate, card?.endDate)}} days duration)
+                </u>
+            </mat-card-content>
+        </mat-card>
+        <!-- <div class="position-absolute bg-white shadow detailed-notes" style="display: none;"
+            [ngStyle]="{'top': labelIndex === 2 ? '0' : 'unset', 'bottom': labelIndex === 2 ? 'unset' : '0'}">
+            <div class="w-100 d-flex flex-row" *ngIf="noteCardData?.length > 1">
+                <ng-container *ngFor="let card of noteCardData">
+                    <div style="width: 50%;">
+                        {{card?.title}}
+                        {{card?.summary}}
+                    </div>
+                </ng-container>
+            </div>
+        </div> -->
+        <!-- <mat-card class="detailed-notes position-absolute bg-white" [ngStyle]="
+        {'left': dateColIndex > 4 ? '0' : 'unset'
+        , 'right': dateColIndex > 4 ? 'unset':'0',
+        'margin-left': dateColIndex > 4 ? 'px' : 'unset', 
+        'margin-right': dateColIndex > 4 ? 'unset' : (card.width+5) + 'px'}">
+            <mat-card-content>
+                {{card?.id}}
+            </mat-card-content>
+        </mat-card> -->
+    </ng-container>
+</ng-template>
